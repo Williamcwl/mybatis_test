@@ -34,7 +34,7 @@ public class IPersistenceTest {
         //userDao.insert(user);
 
         user.setUsername("zhangwu");
-        user.setBirthday("2019-12-03");
+        user.setBirthday("2019-12-04");
         user.setPassword("123456");
         //userDao.update(user);
 
