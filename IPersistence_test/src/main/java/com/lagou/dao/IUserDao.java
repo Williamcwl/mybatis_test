@@ -10,8 +10,13 @@ public interface IUserDao {
     public List<User> findAll() throws Exception;
 
 
-    //根据条件进行用户查询
+    //根据条件进行用户查询findAll
     public User findByCondition(User user) throws Exception;
 
+    public int insert(User user) throws Exception;
+
+    public int delete(User user) throws Exception;
+
+    public int update(User user) throws Exception;
 
 }

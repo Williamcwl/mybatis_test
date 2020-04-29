@@ -1,5 +1,6 @@
 package com.lagou.sqlSession;
 
+import com.lagou.config.SqlTypeEnum;
 import com.lagou.pojo.Configuration;
 import com.lagou.pojo.MappedStatement;
 
@@ -15,26 +16,28 @@ public class DefaultSqlSession implements SqlSession {
     }
 
     @Override
-    public <E> List<E> selectList(String statementid, Object... params) throws Exception {
+    public <E> List<E> selectList(MappedStatement mappedStatement, Object... params) throws Exception {
 
         //将要去完成对simpleExecutor里的query方法的调用
         simpleExecutor simpleExecutor = new simpleExecutor();
-        MappedStatement mappedStatement = configuration.getMappedStatementMap().get(statementid);
         List<Object> list = simpleExecutor.query(configuration, mappedStatement, params);
-
         return (List<E>) list;
     }
 
     @Override
-    public <T> T selectOne(String statementid, Object... params) throws Exception {
-        List<Object> objects = selectList(statementid, params);
+    public <T> T selectOne(MappedStatement mappedStatement, Object... params) throws Exception {
+        List<Object> objects = selectList(mappedStatement, params);
         if(objects.size()==1){
             return (T) objects.get(0);
         }else {
             throw new RuntimeException("查询结果为空或者返回结果过多");
         }
+    }
 
-
+    @Override
+    public int executeUpate(MappedStatement mappedStatement, Object... params) throws Exception {
+        simpleExecutor simpleExecutor = new simpleExecutor();
+        return simpleExecutor.execute(configuration,mappedStatement, params);
     }
 
     @Override
@@ -51,18 +54,22 @@ public class DefaultSqlSession implements SqlSession {
                 String className = method.getDeclaringClass().getName();
 
                 String statementId = className+"."+methodName;
+                MappedStatement mappedStatement = configuration.getMappedStatementMap().get(statementId);
 
-                // 准备参数2：params:args
-                // 获取被调用方法的返回值类型
-                Type genericReturnType = method.getGenericReturnType();
-                // 判断是否进行了 泛型类型参数化
-                if(genericReturnType instanceof ParameterizedType){
-                    List<Object> objects = selectList(statementId, args);
-                    return objects;
+                if(SqlTypeEnum.SELECT.equals(mappedStatement.getSqlType())){
+                    // 准备参数2：params:args
+                    // 获取被调用方法的返回值类型
+                    Type genericReturnType = method.getGenericReturnType();
+                    // 判断是否进行了 泛型类型参数化
+                    if(genericReturnType instanceof ParameterizedType){
+                        List<Object> objects = selectList(mappedStatement, args);
+                        return objects;
+                    }
+
+                    return selectOne(mappedStatement,args);
+                }else{
+                    return executeUpate(mappedStatement,args);
                 }
-
-                return selectOne(statementId,args);
-
             }
         });
 

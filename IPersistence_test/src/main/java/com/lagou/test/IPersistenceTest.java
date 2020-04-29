@@ -21,25 +21,24 @@ public class IPersistenceTest {
 
         //调用
         User user = new User();
-        user.setId(1);
-        user.setUsername("张三");
-      /*  User user2 = sqlSession.selectOne("user.selectOne", user);
-
-        System.out.println(user2);*/
-
-       /* List<User> users = sqlSession.selectList("user.selectList");
-        for (User user1 : users) {
-            System.out.println(user1);
-        }*/
-
         IUserDao userDao = sqlSession.getMapper(IUserDao.class);
-
         List<User> all = userDao.findAll();
         for (User user1 : all) {
             System.out.println(user1);
         }
 
+        user.setId(2);
+        user.setUsername("李四");
+        user.setBirthday("2019-12-03");
+        user.setPassword("123");
+        //userDao.insert(user);
 
+        user.setUsername("zhangwu");
+        user.setBirthday("2019-12-03");
+        user.setPassword("123456");
+        //userDao.update(user);
+
+        userDao.delete(user);
     }
 
 

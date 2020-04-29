@@ -25,17 +25,34 @@ public class XMLMapperBuilder {
 
         String namespace = rootElement.attributeValue("namespace");
 
-        List<Element> list = rootElement.selectNodes("//select");
+        List<Element> list = rootElement.selectNodes("//select|//insert|//delete|//update");
         for (Element element : list) {
             String id = element.attributeValue("id");
             String resultType = element.attributeValue("resultType");
             String paramterType = element.attributeValue("paramterType");
             String sqlText = element.getTextTrim();
+            String sqlType = element.getName();
             MappedStatement mappedStatement = new MappedStatement();
             mappedStatement.setId(id);
             mappedStatement.setResultType(resultType);
             mappedStatement.setParamterType(paramterType);
             mappedStatement.setSql(sqlText);
+            switch(sqlType){
+                case "select":
+                    mappedStatement.setSqlType(SqlTypeEnum.SELECT);
+                    break;
+                case "update":
+                    mappedStatement.setSqlType(SqlTypeEnum.UPDATE);
+                    break;
+                case "insert":
+                    mappedStatement.setSqlType(SqlTypeEnum.INSERT);
+                    break;
+                case "delete":
+                    mappedStatement.setSqlType(SqlTypeEnum.DELETE);
+                    break;
+                default:
+                    break;
+            }
             String key = namespace+"."+id;
             configuration.getMappedStatementMap().put(key,mappedStatement);
 

@@ -5,6 +5,25 @@ public class User {
     private Integer id;
     private String username;
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    private String password;
+    private String birthday;
+
 
     public Integer getId() {
         return id;

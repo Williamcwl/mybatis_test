@@ -1,5 +1,7 @@
 package com.lagou.pojo;
 
+import com.lagou.config.SqlTypeEnum;
+
 public class MappedStatement {
 
     //id标识
@@ -10,6 +12,11 @@ public class MappedStatement {
     private String paramterType;
     //sql语句
     private String sql;
+
+    private SqlTypeEnum sqlType;
+
+    public MappedStatement() {
+    }
 
     public String getId() {
         return id;
@@ -41,5 +48,13 @@ public class MappedStatement {
 
     public void setSql(String sql) {
         this.sql = sql;
+    }
+
+    public SqlTypeEnum getSqlType() {
+        return sqlType;
+    }
+
+    public void setSqlType(SqlTypeEnum sqlType) {
+        this.sqlType = sqlType;
     }
 }

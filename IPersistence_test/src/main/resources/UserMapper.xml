@@ -15,5 +15,18 @@
         select * from user where id = #{id} and username = #{username}
     </select>
 
+    <insert id="insert" paramterType="com.lagou.pojo.User" resultType="java.lang.Integer">
+        INSERT INTO `user`(`id`, `username`, `password`, `birthday`)
+        VALUES (#{id}, #{username}, #{password}, #{birthday})
+    </insert>
+
+    <delete id="delete" paramterType="com.lagou.pojo.User" resultType="java.lang.Integer">
+        delete from user where id = #{id}
+    </delete>
+
+    <update id="update" paramterType="com.lagou.pojo.User" resultType="java.lang.Integer">
+        update user set username = #{username},password = #{password},birthday = #{birthday} where id = #{id}
+    </update>
+
 
 </mapper>
